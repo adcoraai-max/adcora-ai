@@ -23,27 +23,28 @@ export default function Footer() {
 
         </div>
 
-        {/* Services Links */}
+        {/* Site Menu Links */}
         <div className="space-y-6">
-          <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">Services</h4>
+          <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">Site Menu</h4>
           <ul className="space-y-3 text-sm">
-            <li><Link href="/services" className="text-muted hover:text-white transition-colors">AI Automation</Link></li>
-            <li><Link href="/services" className="text-muted hover:text-white transition-colors">Software Engineering</Link></li>
-            <li><Link href="/services" className="text-muted hover:text-white transition-colors">Creative Design</Link></li>
-            <li><Link href="/services" className="text-muted hover:text-white transition-colors">E-commerce Solutions</Link></li>
-            <li><Link href="/services" className="text-muted hover:text-white transition-colors">Marketing Solutions</Link></li>
+            <li><Link href="/" className="text-muted hover:text-white transition-colors">Home</Link></li>
+            <li><Link href="/about" className="text-muted hover:text-white transition-colors">About Us</Link></li>
+            <li><Link href="/services" className="text-muted hover:text-white transition-colors">Services</Link></li>
+            <li><Link href="/portfolio" className="text-muted hover:text-white transition-colors">Portfolio</Link></li>
+            <li><Link href="/blog" className="text-muted hover:text-white transition-colors">Blogs</Link></li>
+            <li><Link href="/careers" className="text-muted hover:text-white transition-colors">Careers</Link></li>
+            <li><Link href="/contact" className="text-muted hover:text-white transition-colors">Contact</Link></li>
           </ul>
         </div>
 
-        {/* Resources / Company Links */}
+        {/* Legal & Policies Links */}
         <div className="space-y-6">
-          <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">Resources</h4>
+          <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">Legal & Policies</h4>
           <ul className="space-y-3 text-sm">
-            <li><Link href="/portfolio" className="text-muted hover:text-white transition-colors">Case Studies</Link></li>
-            <li><Link href="/blog" className="text-muted hover:text-white transition-colors">Blog</Link></li>
-            <li><Link href="/careers" className="text-muted hover:text-white transition-colors">Careers</Link></li>
-            <li><Link href="/client/login" className="text-muted hover:text-white transition-colors">Client Portal</Link></li>
-            <li><Link href="/contact" className="text-muted hover:text-white transition-colors">Book Consultation</Link></li>
+            <li><Link href="/privacy-policy" className="text-muted hover:text-white transition-colors">Privacy Policy</Link></li>
+            <li><Link href="/terms-conditions" className="text-muted hover:text-white transition-colors">Terms and Conditions</Link></li>
+            <li><Link href="/cancellation-policy" className="text-muted hover:text-white transition-colors">Cancellation Policy</Link></li>
+            <li><Link href="/refund-policy" className="text-muted hover:text-white transition-colors">Refund Policy</Link></li>
           </ul>
         </div>
 
@@ -109,8 +110,6 @@ export default function Footer() {
             © {new Date().getFullYear()} AdcoraAI. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link>
             <span className="flex items-center gap-1">
               Built with <Heart className="h-3 w-3 text-red-500 fill-red-500" /> by AdcoraAI
             </span>
