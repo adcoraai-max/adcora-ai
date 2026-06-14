@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 
@@ -17,19 +18,23 @@ export default function PrivacyPolicyPage() {
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/5 blur-[130px] pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[130px] pointer-events-none" />
 
-        <div className="page-container max-w-4xl space-y-8 relative z-10 text-left">
+        <div className="page-container space-y-10 relative z-10 text-left">
           <div className="space-y-4">
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">COMPLIANCE</span>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-tight">
               Privacy Policy
             </h1>
-            <p className="text-xs text-muted-foreground">Last Updated: September 20, 2025</p>
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+              <Link href="/" className="hover:text-white transition-colors">Home</Link>
+              <span className="text-muted-foreground/40">•</span>
+              <span className="text-white/60">Privacy Policy</span>
+            </nav>
           </div>
 
           <div className="prose prose-invert max-w-none text-sm sm:text-base text-muted-foreground leading-relaxed space-y-6 pt-6 border-t border-white/5">
-            <p>
+            <div className="border-l-4 border-secondary pl-6 py-4 bg-secondary/5 rounded-r-xl text-base sm:text-lg text-white/90 mb-8 leading-relaxed">
               At AdcoraAI, we are committed to protecting your privacy. This Privacy Policy outlines the types of personal information we collect, how we use it, and the measures we take to safeguard it. This policy applies to our website and all related services.
-            </p>
+            </div>
 
             <h2 className="text-white font-display font-bold text-lg sm:text-xl pt-4">1. Information We Collect</h2>
             <p>We collect the following types of information:</p>
@@ -85,7 +90,7 @@ export default function PrivacyPolicyPage() {
             <ul className="list-disc pl-6 space-y-2">
               <li>All online transactions are processed securely via RBI-compliant payment gateways.</li>
               <li>We do not store sensitive financial data (e.g., full credit card numbers, CVV).</li>
-              <li>Refunds, if applicable, are processed in line with our Cancellation & Refund Policy.</li>
+              <li>Refunds, if applicable, are processed in line with our <Link href="/cancellation-policy" className="text-secondary hover:underline transition-all font-semibold">Cancellation & Refund Policy</Link>.</li>
             </ul>
 
             <h2 className="text-white font-display font-bold text-lg sm:text-xl pt-4">7. Policy Updates</h2>
@@ -104,6 +109,9 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-white font-display font-bold text-lg sm:text-xl pt-4">9. Legal Compliance</h2>
             <p>
               This policy is intended to comply with the Information Technology Act, 2000 and other applicable Indian laws. In the event of any inconsistency, the provisions of Indian law will take precedence.
+            </p>
+            <p className="text-xs text-muted-foreground pt-6 border-t border-white/5 mt-4">
+              Last Updated: June 5, 2026
             </p>
           </div>
         </div>
