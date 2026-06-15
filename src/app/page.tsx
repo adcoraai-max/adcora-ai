@@ -9,6 +9,7 @@ import TrustSection from "@/components/public/TrustSection";
 import CTASection from "@/components/public/CTASection";
 import ContactPreview from "@/components/public/ContactPreview";
 import Footer from "@/components/shared/Footer";
+import MobileStickyBar from "@/components/public/MobileStickyBar";
 
 export default function Home() {
   const jsonLd = {
@@ -47,15 +48,23 @@ export default function Home() {
         <Hero />
         <TrustedBy />
         <ServicesPreview />
-        <Process />
+
+        {/* Process & Trust — hidden on mobile to reduce scroll length */}
+        <div className="hidden md:block">
+          <Process />
+          <TrustSection />
+        </div>
+
         <WhyChooseUs />
-        <TrustSection />
         <PortfolioPreview />
         <CTASection />
         <ContactPreview />
       </div>
 
       <Footer />
+
+      {/* Mobile-only sticky CTA bar */}
+      <MobileStickyBar />
     </>
   );
 }
