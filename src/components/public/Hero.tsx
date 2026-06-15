@@ -224,13 +224,19 @@ export default function Hero() {
             variants={staggerItem}
             className="font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[3.8rem] xl:text-[4.2rem] font-black leading-tight tracking-tight text-white min-h-[3.6em] sm:min-h-[3.6em] md:min-h-[3.6em] lg:min-h-[2.3em] xl:min-h-[2.3em] text-center lg:text-left"
           >
-            Building the Future with <br />
-            <span className="gradient-text inline-flex min-h-[1.25em] items-center whitespace-nowrap">
-              <TypingText
-                texts={["AI & Automation", "Digital Excellence", "Intelligent Systems", "Custom Software"]}
-                speed={55}
-                pauseDuration={2000}
-              />
+            {/* SEO & Screen Reader Friendly Full Heading */}
+            <span className="sr-only">
+              Building the Future with AI & Automation, Digital Excellence, Intelligent Systems, and Custom Software
+            </span>
+            <span aria-hidden="true">
+              Building the Future with <br />
+              <span className="gradient-text inline-flex min-h-[1.25em] items-center whitespace-nowrap">
+                <TypingText
+                  texts={["AI & Automation", "Digital Excellence", "Intelligent Systems", "Custom Software"]}
+                  speed={55}
+                  pauseDuration={2000}
+                />
+              </span>
             </span>
           </motion.h1>
 

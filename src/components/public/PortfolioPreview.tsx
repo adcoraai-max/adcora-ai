@@ -20,7 +20,7 @@ const projects = [
     category: "ai",
     desc: "Autonomously handles support tickets, schedules client intake calendars, and updates sales leads.",
     metric: "120 hrs/mo saved",
-    link: "/portfolio",
+    link: "/portfolio/aether-crm-agent",
     glowColor: "rgba(139,92,246,0.12)",
   },
   {
@@ -28,7 +28,7 @@ const projects = [
     category: "software",
     desc: "High-frequency tracking portal integrating Supabase real-time clients and leaflet vector mappings.",
     metric: "99.99% Sync SLA",
-    link: "/portfolio",
+    link: "/portfolio/nova-logistics-dashboard",
     glowColor: "rgba(14,165,233,0.12)",
   },
   {
@@ -36,7 +36,7 @@ const projects = [
     category: "creative",
     desc: "Decoupled component architecture designed for a global SaaS brand to unify UI tokens across web portals.",
     metric: "40% dev speedup",
-    link: "/portfolio",
+    link: "/portfolio/vertex-design-tokens",
     glowColor: "rgba(167,92,246,0.12)",
   },
   {
@@ -44,7 +44,7 @@ const projects = [
     category: "software",
     desc: "Fast Shopify-decoupled Next.js checkout platform utilizing edge sitemap indexes and Stripe API webhooks.",
     metric: "2.4x checkout speed",
-    link: "/portfolio",
+    link: "/portfolio/apex-cloud-storefront",
     glowColor: "rgba(16,185,129,0.12)",
   },
 ];

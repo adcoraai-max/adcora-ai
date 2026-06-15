@@ -216,6 +216,8 @@ export default function ContactPreview() {
                       <option value="software">Software Solutions</option>
                       <option value="creative">Creative Solutions</option>
                       <option value="marketing">Marketing Solutions</option>
+                      <option value="ecommerce">Ecommerce Solutions</option>
+                      <option value="social">Social Media Management</option>
                     </select>
                   </div>
                 </div>

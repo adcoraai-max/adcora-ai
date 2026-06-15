@@ -543,12 +543,29 @@ body {
   }
 }
 
+@utility animate-marquee-reverse {
+  animation: marquee-reverse 35s linear infinite;
+
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 
