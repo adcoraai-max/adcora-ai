@@ -16,6 +16,7 @@ export default function CareersWorkspace() {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const perks = [
     { title: "Distributed & Remote Work", desc: "We support asynchronous operations, letting you build from any location." },
@@ -54,15 +55,53 @@ export default function CareersWorkspace() {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name && form.email && form.position) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
+    if (!form.name || !form.email || !form.position || !form.resume) return;
+
+    // Strict email format validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "YOUR_WEB3FORMS_ACCESS_KEY_HERE",
+          name: form.name,
+          email: form.email,
+          subject: `New Job Application: ${form.position} - ${form.name}`,
+          from_name: "AdcoraAI Careers Portal",
+          message: `Job Application details:
+Candidate Name: ${form.name}
+Candidate Email: ${form.email}
+Target Position: ${form.position}
+Resume PDF Link: ${form.resume}
+Cover Note: ${form.coverLetter || "None provided"}`,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
         setSuccess(true);
         setForm({ name: "", email: "", position: "", resume: "", coverLetter: "" });
-      }, 1500);
+      } else {
+        setError(result.message || "Failed to submit application. Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -308,6 +347,16 @@ export default function CareersWorkspace() {
                 className="textarea-dark text-sm"
               />
             </div>
+
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-3 text-sm font-semibold rounded-lg bg-red-500/10 border border-red-500/20 text-red-400"
+              >
+                ⚠ {error}
+              </motion.div>
+            )}
 
             {success ? (
               <motion.div
