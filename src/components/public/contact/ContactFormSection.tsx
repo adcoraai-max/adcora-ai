@@ -16,6 +16,7 @@ export default function ContactFormSection() {
     budget: "",
     message: "",
   });
+  const [customBudget, setCustomBudget] = useState("");
   
   // Validation State
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -50,6 +51,7 @@ export default function ContactFormSection() {
     { value: "5k_20k", label: "$5,000 - $20,000" },
     { value: "20k_50k", label: "$20,000 - $50,000" },
     { value: "gt50k", label: "$50,000+" },
+    { value: "custom", label: "Custom Budget (Specify yourself)" },
   ];
 
   const timezones = [
@@ -90,7 +92,7 @@ export default function ContactFormSection() {
     
     if (!messageForm.email.trim()) {
       newErrors.email = "Email Address is required";
-    } else if (!/\S+@\S+\.\S+/.test(messageForm.email)) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(messageForm.email)) {
       newErrors.email = "Please enter a valid email address";
     }
     
@@ -102,7 +104,7 @@ export default function ContactFormSection() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleMessageSubmit = (e: React.FormEvent) => {
+  const handleMessageSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateMessageForm()) return;
 
@@ -110,10 +112,28 @@ export default function ContactFormSection() {
     setSubmitStatus("idle");
     setCrmRef(null);
 
-    // Mock API call
-    setTimeout(() => {
-      // Simulate 95% success rate
-      if (Math.random() > 0.05) {
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "YOUR_WEB3FORMS_ACCESS_KEY_HERE",
+          name: messageForm.name,
+          email: messageForm.email,
+          company: messageForm.company,
+          service: messageForm.service,
+          budget: messageForm.budget === "custom" ? customBudget : messageForm.budget,
+          message: messageForm.message,
+          subject: `New Project Intake Brief - ${messageForm.name}`,
+          from_name: "AdcoraAI Website",
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
         setSubmitStatus("success");
         setCrmRef(Math.floor(1000 + Math.random() * 9000));
         setMessageForm({
@@ -127,17 +147,20 @@ export default function ContactFormSection() {
       } else {
         setSubmitStatus("error");
       }
+    } catch (err) {
+      setSubmitStatus("error");
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
-  const handleScheduleSubmit = (e: React.FormEvent) => {
+  const handleScheduleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
     if (!schedulerForm.name.trim()) newErrors.sName = "Full Name is required";
     if (!schedulerForm.email.trim()) {
       newErrors.sEmail = "Email Address is required";
-    } else if (!/\S+@\S+\.\S+/.test(schedulerForm.email)) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(schedulerForm.email)) {
       newErrors.sEmail = "Please enter a valid email address";
     }
     
@@ -147,10 +170,39 @@ export default function ContactFormSection() {
     }
 
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "YOUR_WEB3FORMS_ACCESS_KEY_HERE",
+          name: schedulerForm.name,
+          email: schedulerForm.email,
+          subject: `New Diagnostic Consultation Booked - ${schedulerForm.name}`,
+          from_name: "AdcoraAI Website Scheduler",
+          message: `Consultation details booked:
+Date: ${selectedDate}
+Time: ${selectedTime}
+Timezone: ${timezone}
+Notes/Focus: ${schedulerForm.notes || "None provided"}`,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setScheduleStep("success");
+      } else {
+        setErrors({ sEmail: result.message || "Failed to schedule slot. Please try again." });
+      }
+    } catch (err) {
+      setErrors({ sEmail: "An error occurred. Please try again later." });
+    } finally {
       setLoading(false);
-      setScheduleStep("success");
-    }, 1500);
+    }
   };
 
   return (
@@ -404,6 +456,27 @@ export default function ContactFormSection() {
                     </select>
                     {errors.budget && <span className="text-rose-400 text-[0.7rem] font-semibold mt-1 block">{errors.budget}</span>}
                   </div>
+
+                  {messageForm.budget === "custom" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      className="space-y-2"
+                    >
+                      <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-2" htmlFor="m-custom-budget">
+                        Specify Your Budget *
+                      </label>
+                      <input
+                        id="m-custom-budget"
+                        type="text"
+                        required
+                        value={customBudget}
+                        onChange={(e) => setCustomBudget(e.target.value)}
+                        placeholder="Specify your budget (e.g. $8,500 / ₹5,00,000)..."
+                        className="input-dark text-sm"
+                      />
+                    </motion.div>
+                  )}
 
                   <div>
                     <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-2" htmlFor="m-message">

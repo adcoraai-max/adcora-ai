@@ -60,12 +60,6 @@ export default function Navbar() {
       {/* Action Buttons */}
       <div className="hidden lg:flex items-center gap-4">
         <Link
-          href="/client/login"
-          className="text-sm font-semibold text-foreground/80 hover:text-white transition-colors px-4 py-2"
-        >
-          Client Login
-        </Link>
-        <Link
           href="/contact"
           className="btn-primary py-2 px-5 text-sm rounded-lg shadow-glow-primary flex items-center gap-1.5 group"
         >
@@ -112,13 +106,6 @@ export default function Navbar() {
               ))}
             </nav>
             <div className="flex flex-col gap-4 mt-2">
-              <Link
-                href="/client/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="btn-glass py-2.5 text-center text-sm font-semibold rounded-lg"
-              >
-                Client Login
-              </Link>
               <Link
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}

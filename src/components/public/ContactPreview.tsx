@@ -15,12 +15,55 @@ export default function ContactPreview() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [customBudget, setCustomBudget] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name && form.email) {
-      setSubmitted(true);
-      setForm({ name: "", email: "", company: "", service: "", budget: "", message: "" });
+    if (!form.name || !form.email) return;
+
+    // Email format validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    setError("");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "YOUR_WEB3FORMS_ACCESS_KEY_HERE",
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          service: form.service,
+          budget: form.budget === "custom" ? customBudget : form.budget,
+          message: form.message,
+          subject: `New Client Intake Lead - ${form.name}`,
+          from_name: "AdcoraAI Website",
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSubmitted(true);
+        setForm({ name: "", email: "", company: "", service: "", budget: "", message: "" });
+      } else {
+        setError(result.message || "Failed to send message. Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again later.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -192,8 +235,30 @@ export default function ContactPreview() {
                     <option value="5k_20k">$5,000 - $20,000</option>
                     <option value="20k_50k">$20,000 - $50,000</option>
                     <option value="gt50k">$50,000+</option>
+                    <option value="custom">Custom Budget (Specify yourself)</option>
                   </select>
                 </div>
+
+                {form.budget === "custom" && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="space-y-2"
+                  >
+                    <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-2" htmlFor="custom-budget">
+                      Specify Your Budget *
+                    </label>
+                    <input
+                      id="custom-budget"
+                      type="text"
+                      required
+                      value={customBudget}
+                      onChange={(e) => setCustomBudget(e.target.value)}
+                      placeholder="Specify your budget (e.g. $8,500 / ₹5,00,000)..."
+                      className="input-dark"
+                    />
+                  </motion.div>
+                )}
 
                 <div>
                   <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-2" htmlFor="message">
@@ -208,6 +273,16 @@ export default function ContactPreview() {
                   />
                 </div>
 
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-3 text-sm font-semibold rounded-lg bg-red-500/10 border border-red-500/20 text-red-400"
+                  >
+                    ⚠ {error}
+                  </motion.div>
+                )}
+
                 {submitted ? (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
@@ -219,12 +294,15 @@ export default function ContactPreview() {
                 ) : (
                   <motion.button
                     type="submit"
-                    whileHover={{ y: -4, scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    disabled={submitting}
+                    whileHover={submitting ? {} : { y: -4, scale: 1.02 }}
+                    whileTap={submitting ? {} : { scale: 0.98 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="btn-primary w-full py-3 rounded-lg flex items-center justify-center gap-2 font-semibold shadow-glow-primary cursor-pointer"
+                    className={`btn-primary w-full py-3 rounded-lg flex items-center justify-center gap-2 font-semibold shadow-glow-primary cursor-pointer ${
+                      submitting ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                   >
-                    <span>Send Intake Message</span>
+                    <span>{submitting ? "Sending Intake..." : "Send Intake Message"}</span>
                     <Send className="h-4 w-4" />
                   </motion.button>
                 )}
